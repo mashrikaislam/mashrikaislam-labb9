@@ -46,42 +46,37 @@ if (words.size() < 5) {
 // until they enter a file that can be opened. If the file is empty, this method
 // should raise an EmptyFileException that contains the file’s path in its message.
 
-public static StringBuffer processFile (String path) throws EmptyFileException {
+public static StringBuffer processFile(String path) throws EmptyFileException {
+    Scanner stdin = new Scanner(System.in);
 
-//convert file to stringbuffer
-// StringBuffer s = new StringBuffer(path);
-// return s; 
+    // Keep trying until we can actually OPEN the file (not just exists())
+    Scanner fileScanner = null;
+    while (true) {
+        try {
+            fileScanner = new Scanner(new File(path)); // try to open
+            break; // success
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found. Re-enter file path:");
+            if (stdin.hasNextLine()) {
+                path = stdin.nextLine();
+            } else {
+                // No input to re-enter path; fail fast rather than returning silent empty
+                throw new RuntimeException("No input available to re-enter file path");
+            }
+        }
+    }
 
+    StringBuffer buffer = new StringBuffer();
+    while (fileScanner.hasNextLine()) {
+        buffer.append(fileScanner.nextLine());
+        if (fileScanner.hasNextLine()) buffer.append("\n");
+    }
+    fileScanner.close();
 
-Scanner s = new Scanner(System.in);//creates scanner to read input 
-File file = new File(path); //creates file object from path string
-
-while (!file.exists()) {  // check if file exists
-    System.out.println("File not found. Re-enter file path:");
-    path = s.nextLine(); 
-    file = new File(path);
-}
-
-StringBuffer buffer = new StringBuffer();//creates an empty StringBuffer to store the text from the file
-try {
-    Scanner fileScanner = new Scanner(file); //creates scanner for actual file to read contents
-
-while (fileScanner.hasNextLine()) { 
-    buffer.append(fileScanner.nextLine()); //add file lines to the buffer
-    if (fileScanner.hasNextLine()) buffer.append("\n");
-}
-fileScanner.close(); 
-} catch (FileNotFoundException e){
-    return new StringBuffer();
-}
-
-if (buffer.length() == 0) {//check if file is tmpty 
-    throw new EmptyFileException(path + " was empty");
-}
-
-return buffer;
-
-
+    if (buffer.length() == 0) {
+        throw new EmptyFileException(path + " was empty");
+    }
+    return buffer;
 }
 
 public static void main(String[] args) {  
@@ -100,17 +95,16 @@ int option = keyboard.nextInt();
 
 while(option != 1 && option != 2){
     System.out.println("Please enter valid option");
-    option = keyboard.nextInt();
-    keyboard.nextLine();
+    option = Integer.parseInt(keyboard.nextLine().trim());
+
 }
 
-  if (option == 1) {
-     String path;
+  if (option == 2) {
     if (args.length > 0) {
-            path = args[0];
+        textBuffer.append(args[0]);
     } else {
-        System.out.println("Enter file path: ");
-         path = keyboard.nextLine();
+        System.out.println("Enter text: ");
+        textBuffer.append(keyboard.nextLine());
     }
 
     try {
@@ -121,8 +115,8 @@ while(option != 1 && option != 2){
 
 } else {
     System.out.println("Enter text: ");
-    String input = keyboard.nextLine();
-    textBuffer.append(input);
+    textBuffer.append(keyboard.nextLine());
+
 }
 
 //Note that the path of the empty file may not be the same path that was 

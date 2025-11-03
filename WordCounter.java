@@ -38,7 +38,6 @@ if (words.size() < 5) {
     // 5) not found
     throw new InvalidStopwordException("Couldn't find stopword: " + stopWord);
 
-
 }
 
 // a method called processFile that expects a String path as an argument, 

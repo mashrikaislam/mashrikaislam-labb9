@@ -1,0 +1,9 @@
+Process a file with either option 1, or text with option 2
+Found 5 words.
+Process a file with either option 1, or text with option 2
+Found 9 words.
+Process a file with either option 1, or text with option 2
+file1.txt was empty
+TooSmallText: Only found 0 words.
+Process a file with either option 1, or text with option 2
+TooSmallText: Only found 2 words.

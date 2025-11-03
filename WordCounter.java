@@ -17,18 +17,18 @@ ArrayList<String> words = new ArrayList<>();
 
 boolean found = false;
 while (matcher.find()) {
-    words.add(matcher.group()); // get the matched word
+    words.add(matcher.group()); 
 }
 if (words.size() < 5) {
         throw new TooSmallText("Only found " + words.size() + " words.");
 }
 
-    // 3) no stopword → return total
+    // 3) no stopword return total
     if (stopWord == null) {
         return words.size();
     }
 
-    // 4) find stopword position
+    // find stopword position & get count
     for (int i = 0; i < words.size(); i++) {
         if (words.get(i).equals(stopWord)) {
             return i + 1; // count is index+1
@@ -75,6 +75,7 @@ fileScanner.close();
 } catch (FileNotFoundException e){
     return new StringBuffer();
 }
+
 if (buffer.length() == 0) {//check if file is tmpty 
     throw new EmptyFileException(path + " was empty");
 }
@@ -155,7 +156,6 @@ try{
     try {
     int count = processText(textBuffer, stopWord);
     System.out.println("Found " + count + " words.");
-    
     } catch (TooSmallText e1){
         System.out.println(e1.getClass().getSimpleName() + ": " + e1.getMessage());
     } catch (InvalidStopwordException e2){
